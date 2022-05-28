@@ -14,4 +14,9 @@ export class PostsService {
         const post = await this.postRepository.create({...dto, image: fileName});
         return post;
     }
+
+    async getPosts() {
+        const posts = await this.postRepository.findAll();
+        return posts;
+    }
 }

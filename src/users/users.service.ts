@@ -1,15 +1,15 @@
-import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
-import {User} from "./users.model";
-import {InjectModel} from "@nestjs/sequelize";
-import {CreateUserDto} from "./dto/create-user.dto";
-import {RolesService} from "../roles/roles.service";
-import {AddRoleDto} from "./dto/add-role.dto";
-import {BanUserDto} from "./dto/ban-user.dto";
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { User } from "./users.model";
+import { InjectModel } from "@nestjs/sequelize";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { RolesService } from "../roles/roles.service";
+import { AddRoleDto } from "./dto/add-role.dto";
+import { BanUserDto } from "./dto/ban-user.dto";
 
 @Injectable()
 export class UsersService {
     constructor(@InjectModel(User) private userRepository: typeof User,
-                private roleService: RolesService) {
+        private roleService: RolesService) {
     }
 
     async createUser(dto: CreateUserDto) {
@@ -20,13 +20,26 @@ export class UsersService {
         return user;
     }
 
+
+    async deleteUser(id: number) {
+        const user = await this.userRepository.findByPk(id);
+
+        if (user) {
+            await user.destroy();
+            return user;
+        } else {
+            throw new HttpException('Пользователь с таким id не найдет', HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
     async getAllUsers() {
-        const users = await this.userRepository.findAll({include: {all: true}});
+        const users = await this.userRepository.findAll({ include: { all: true } });
         return users;
     }
 
     async getUserByEmail(email: string) {
-        const user = await this.userRepository.findOne({where: {email}, include: {all: true}});
+        const user = await this.userRepository.findOne({ where: { email }, include: { all: true } });
         return user;
     }
 

@@ -17,7 +17,8 @@ export class AuthService {
 
     async registration(dto: CreateUserDto) {
         const candidate = await this.userService.getUserByEmail(dto.email);
-
+        console.log(candidate)
+        
         if (candidate) {
             throw new HttpException('Пользователь с таким email адресом уже существует', HttpStatus.BAD_REQUEST);
         }

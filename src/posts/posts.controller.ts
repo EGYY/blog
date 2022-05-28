@@ -1,4 +1,4 @@
-import {Body, Controller, Post, UploadedFile, UseInterceptors} from '@nestjs/common';
+import {Body, Controller, Get, Post, UploadedFile, UseInterceptors} from '@nestjs/common';
 import {CreatePostDto} from "./dto/create-post.dto";
 import {PostsService} from "./posts.service";
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
@@ -18,5 +18,12 @@ export class PostsController {
     createPost(@Body() dto: CreatePostDto,
                @UploadedFile() image) {
         return this.postService.createPost(dto, image);
+    }
+
+    @ApiOperation({summary: 'Получение всех постов'})
+    @ApiResponse({status: 200, type: [PostModel]})
+    @Get()
+    getPosts() {
+        return this.postService.getPosts();
     }
 }
