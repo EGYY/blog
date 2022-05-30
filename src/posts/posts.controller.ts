@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Post, UploadedFile, UseInterceptors} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseInterceptors} from '@nestjs/common';
 import {CreatePostDto} from "./dto/create-post.dto";
 import {PostsService} from "./posts.service";
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
@@ -18,6 +18,20 @@ export class PostsController {
     createPost(@Body() dto: CreatePostDto,
                @UploadedFile() image) {
         return this.postService.createPost(dto, image);
+    }
+
+    @ApiOperation({summary: 'Редактирование поста'})
+    @ApiResponse({status: 200, type: PostModel})
+    @Patch("/:id")
+    updatePost(@Param('id') id:number, @Body() dto: CreatePostDto) {
+        return this.postService.updatePost(id, dto);
+    }
+
+    @ApiOperation({summary: 'Удаление поста'})
+    @ApiResponse({status: 200, type: PostModel})
+    @Delete("/:id")
+    deletePost(@Param('id') id:number) {
+        return this.postService.deletePost(id);
     }
 
     @ApiOperation({summary: 'Получение всех постов'})
